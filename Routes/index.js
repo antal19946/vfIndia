@@ -28,7 +28,7 @@ router.use(cors(corsOpts));
 // router.use(express.static(__dirname + '../uploads/'))
 router.get('/save_advance_info',save_advance_info)
 router.get('/get_advance_info',async(req,res)=>{
-    const advance =await User.test()
+    const advance =await User.test(req.body)
     res.json({advance})
 })
 module.exports = router;

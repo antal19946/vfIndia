@@ -63,7 +63,7 @@ const advanceInfoSchema = new mongoose.Schema({
             },
             value:{
                 type:String,
-                default:"alnum"
+                default:"numeric"
             }
         },
         user_gen_digit:{
@@ -83,10 +83,10 @@ const advanceInfoSchema = new mongoose.Schema({
             },
             value:{
                 type:String,
-                default:null
+                default:''
             }
         },
-        pass_gen_type:{
+        pass_gen_method:{
             title:{
                 type:String,
                 default:"Password Generation Type"
