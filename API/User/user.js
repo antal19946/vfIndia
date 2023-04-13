@@ -1,3 +1,4 @@
+const { generateToken } = require("../../../controller/commans");
 const UserData = require("../../Modals/Users");
 const advance_info = require("../../Modals/advanceInfo");
 const validator = require("email-validator");
@@ -12,7 +13,7 @@ class user{
   }
   async test(body){
     // this.advance = body
-    return await this.generateUserName(body.userName);
+    return this.advance;
   }
     async generateUserName(userName){
       const {user_gen_method,user_gen_prefix,user_gen_digit} = this.advance.Registration;
@@ -23,17 +24,17 @@ class user{
           Math.random() * ((10**(user_gen_digit.value)-1)- 10**(user_gen_digit.value-1) + 1) + 10**(user_gen_digit.value-1)
         );
         const userNmae = `${user_gen_prefix.value}${number}`;
-        return ({status:true,userNmae});
+        return ({status:true,userName:userNmae});
       } else if (user_gen_method.value === "manual") {
         var alfanum = /^[0-9a-zA-Z]+$/;
         if (userName.match(alfanum)) {
-          return userName;
+          return ({status:true,userName});
         } else {
-          return false;
+          return ({status:false,message:"please enter valid username"});
         }
       }
     } else {
-      return false;
+      return ({status:false,message:"please enter username"});
     }
   };
   async isMobile(mobile){
@@ -91,18 +92,18 @@ class user{
   async sponsor(sponsor_Id){
     const {is_sponsor_active_required} = this.advance.Registration;
     const sponsor_Data = await UserData.findOne({user_Id:sponsor_Id})
-    if(sponsor_Data.count()===1){
+    if(sponsor_Data){
       if(is_sponsor_active_required.value==="yes"){
         if(sponsor_Data.status== 1){
-          return({status:true,sponsor_Id})
+          return({status:true,sponsor_Id,name:sponsor_Data.name})
         }else{
           return({status:false,message:"sponsor not active"})
         }
       }else {
-        return({status:true,sponsor_Id})
+        return({status:true,sponsor_Id,name:sponsor_Data.name})
       }
     }else{
-      return({status:false,message:"Invalid sponsor"})
+      return({status:false,message:"Invalid sponsor",sponsor_Data})
     }
 
   }
@@ -110,36 +111,60 @@ class user{
     const { name, email, mobile, password, user_Id, sponsor_Id } = body;
     const velidUserName = await this.generateUserName(user_Id);
       const isEmail = await this.isEmail(email);
-      const isMobile = await this.isMobile(mobile);
+       const isMobile = await this.isMobile(mobile);
       const sponsor_Data = await this.sponsor(sponsor_Id);
-      const isexist = await UserData.findOne({ user_Id: velidUserName });
-      const isStrongPassword = await this.generatePassword(password);
+       const isexist = await UserData.findOne({user_Id:velidUserName.userName});
+       const isStrongPassword = await this.generatePassword(password);
       const Error = await (!isMobile.status
         ? isMobile
         : !isEmail.status
         ? isEmail
         : !velidUserName
-        ? { status: false, massage: "please enter valid username" }
+        ? { status: false, message: "please enter valid username" }
         : !isStrongPassword.status
         ? isStrongPassword
         : isexist
-        ? { status: false, massage: "username already exist" }
+        ? { status: false, message: "username already exist" }
         : !sponsor_Data.status
-        ? { status: false, massage: "sponsor id not exist" }
-        : { status: true, massage: "registration success" });
-      if (Error.status) {
-        const user = new UserData({
+        ? sponsor_Data
+        : { status: true, message: "registration success" });
+        if (Error.status) {
+          const user = new UserData({
           name,
           email,
-          phone,
-          password: await hashPassword(isStrongPassword),
-          user_Id: velidUserName,
+          mobile,
+          password: isStrongPassword.password,
+          user_Id: velidUserName.userName,
           sponsor_Id,
           sponsor_Name: sponsor_Data.name,
         });
         const result = await user.save();
+        const accessToken = await generateToken(result.user_Id);
 
+        return {status:Error.status,message:Error.message,accessToken,result}
+  }else{
+    return Error
   }
+}
+// async getProfile(Authorization_Token) {
+//   if (Authorization_Token) {
+//     jwt.verify(Authorization_Token, secrateKey(), function (err, resp) {
+//       if (err) {
+//         res.json({ status: false, err });
+//       } else {
+//         UserData.findOne({ user_Id: resp.user_Id }, async (err, result) => {
+//           if (err) {
+//             res.json({ status: false, err });
+//           } else {
+//             res.json({ status: true, result });
+//           }
+//         });
+//       }
+//     });
+//   } else {
+//     res.json({ status: false, message: "Failed to authenticate token." });
+//   }
+// }
 }
 const characters =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
