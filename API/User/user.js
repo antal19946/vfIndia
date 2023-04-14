@@ -1,7 +1,9 @@
-const { generateToken } = require("../../../controller/commans");
+const { generateToken, verifyToken } = require("../../controller/commans/Auth");
 const UserData = require("../../Modals/Users");
 const advance_info = require("../../Modals/advanceInfo");
 const validator = require("email-validator");
+const bcrypt = require("bcrypt");
+
 class user{
   constructor() {
     this.advance = 'null';
@@ -68,13 +70,13 @@ class user{
       return generateString(pass_gen_digit.value);
     } else if (pass_gen_method.value === "manual") {
       if (pass_gen_fun.value === "basic") {
-        if (password.length >= 4) {
+        if (password?.length >= 4) {
           return ({status:true,password});
         } else {
           return ({status:false,message:"password should be minimum 4 characters"});
         }
-      } else if (pass_gen_fun.value === "strong") {
-        if (password.length === 8) {
+      } else if (pass_gen_fun?.value === "strong") {
+        if (password?.length === 8) {
           return ({status:true,password});
         } else {
           return ({status:false,message:"password should be minimum 8 characters"});
@@ -133,7 +135,7 @@ class user{
           name,
           email,
           mobile,
-          password: isStrongPassword.password,
+          password: await hashPassword(isStrongPassword.password),
           user_Id: velidUserName.userName,
           sponsor_Id,
           sponsor_Name: sponsor_Data.name,
@@ -146,26 +148,72 @@ class user{
     return Error
   }
 }
-// async getProfile(Authorization_Token) {
-//   if (Authorization_Token) {
-//     jwt.verify(Authorization_Token, secrateKey(), function (err, resp) {
-//       if (err) {
-//         res.json({ status: false, err });
-//       } else {
-//         UserData.findOne({ user_Id: resp.user_Id }, async (err, result) => {
-//           if (err) {
-//             res.json({ status: false, err });
-//           } else {
-//             res.json({ status: true, result });
-//           }
-//         });
-//       }
-//     });
-//   } else {
-//     res.json({ status: false, message: "Failed to authenticate token." });
-//   }
-// }
+async getProfile(Authorization_Token) {
+  if (Authorization_Token) {
+   const verification= await verifyToken(Authorization_Token);
+   if(verification.status){
+    const Profile = await UserData.findOne({user_Id:verification.resp.user_Id})
+    return {status:true,Profile};
+   }else{
+    return verification;
+   }
+  } else {
+    return({ status: false, message: "Failed to authenticate token." });
+  }
 }
+
+async UpdateProfile(Authorization_Token,body,fileName,hostName) {
+  const { name, email, phone } = body;
+ 
+  const profile_pic = "http://" + hostName + "/" + fileName;
+  if (Authorization_Token) {
+      const verification =await verifyToken(Authorization_Token)
+      if (verification.status) {
+        const update = await UserData.findOneAndUpdate(
+          { user_Id: verification.resp.user_Id },
+          { name, email, phone, profile_pic })
+          return {status:true,update};
+      } else {
+          return verification;
+      }
+    
+  } else {
+    return({ status: false, message: "Failed to authenticate token." });
+  }
+}
+async Login(body) {
+  const {user_Id,password} = body
+  const UserDetail = await UserData.findOne({ user_Id })
+  try{
+      if (UserDetail) {
+          const comparePassword = await bcrypt.compare(password, UserDetail.password)
+          if (UserDetail && comparePassword) {
+              const accessToken = await generateToken(UserDetail.user_Id)
+               return({accessToken,
+                  status:true,
+                  UserDetail})
+          } else {
+              return({
+                  status:false,message:"username or Passwords dose NOT match!"})
+          }
+      } else {
+          return({
+              status:false,message:"username or Passwords dose NOT match!"})
+      }
+  }catch(e){
+      return({
+          status:false,messsage:"username or Passwords dose NOT match!"})
+
+  }
+ 
+}
+}
+
+const hashPassword = async (plaintextPassword) => {
+  console.log("object", plaintextPassword);
+  const hash = await bcrypt.hash(plaintextPassword, 10);
+  return await hash;
+};
 const characters =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
   function generateString(length) {
