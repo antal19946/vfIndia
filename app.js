@@ -3,7 +3,7 @@ require('./DBconnection/Connection')
 const app = express()
 const router = require('./Routes/index')
 app.use(express.urlencoded({extended: false}))
-const port = 3000;
+const port = 3001;
 app.use(express.static(__dirname + '/uploads/'))
 app.use(router)
 var bodyParser = require('body-parser'); 

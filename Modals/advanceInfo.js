@@ -139,6 +139,37 @@ const advanceInfoSchema = new mongoose.Schema({
             }
         },
     },
+    Investment:{
+        topup_type:{
+            title:{
+                type:String,
+                default:"topup type"
+            },
+            options:{
+                type:String,
+                default:"pin,fund"
+            },
+            value:{
+                type:String,
+                default:"pin"
+            }
+        },
+        re_topup_type:{
+            title:{
+                type:String,
+                default:"Re-topup type"
+            },
+            options:{
+                type:String,
+                default:"pin,fund"
+            },
+            value:{
+                type:String,
+                default:"pin"
+            }
+        }
+        
+    }
    
    
 })
