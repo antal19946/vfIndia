@@ -148,18 +148,11 @@ class user{
     return Error
   }
 }
-async getProfile(Authorization_Token) {
-  if (Authorization_Token) {
-   const verification= await verifyToken(Authorization_Token);
-   if(verification.status){
-    const Profile = await UserData.findOne({user_Id:verification.resp.user_Id})
-    return {status:true,Profile};
-   }else{
-    return verification;
-   }
-  } else {
-    return({ status: false, message: "Failed to authenticate token." });
-  }
+async getProfile(user_Id) {
+  
+    const Profile = await UserData.findOne({user_Id})
+    return Profile;
+  
 }
 
 async UpdateProfile(Authorization_Token,body,fileName,hostName) {

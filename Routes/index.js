@@ -5,6 +5,7 @@ const path = require('path');
 const { save_advance_info } = require("../API/AdminAD/advance");
 const  {User}  = require("../API/User/user");
 const { upload } = require("../controller/commans/UploadFile");
+const { Teams } = require("../API/User/getLevelTeam");
 var router = express.Router();
 var jsonParser = bodyParser.json();
 router.use(jsonParser)
@@ -37,14 +38,27 @@ router.post('/login',async(req,res)=>{
 })
 router.post('/get_profile',async(req,res)=>{
     const Authorization_Token = await req.header("Authorization");
-    const advance =await User.getProfile(Authorization_Token)
-    res.json({advance})
+    if (Authorization_Token) {
+        const verification= await verifyToken(Authorization_Token);
+        if(verification.status){
+         const Profile = await User.getProfile(verification.resp.user_Id)
+          res.json({status:true,Profile}); 
+        }else{
+         res.json({verification});
+        }
+       } else {
+         res.json({ status: false, message: "Failed to authenticate token." });
+       }
 })
 router.post('/update_profile',upload.single('file'),async(req,res)=>{
     const Authorization_Token = await req.header("Authorization");
     let fileName = req?.file?.filename;
     let hostName = req.headers.host;
     const advance =await User.UpdateProfile(Authorization_Token,req.body,fileName,hostName)
+    res.json({advance})
+})
+router.get('/get_level_team',async(req,res)=>{
+    const advance =await Teams.getLevelTeam('586764',20)
     res.json({advance})
 })
 router.get('/test',async(req,res)=>{
