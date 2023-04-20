@@ -7,6 +7,7 @@ const  {User}  = require("../API/User/user");
 const { upload } = require("../controller/commans/UploadFile");
 const { Teams } = require("../API/User/getLevelTeam");
 const { verifyToken } = require("../controller/commans/Auth");
+const { ePin } = require("../API/AdminAD/generatePin");
 var router = express.Router();
 var jsonParser = bodyParser.json();
 router.use(jsonParser)
@@ -73,6 +74,10 @@ router.get('/get_level_team',async(req,res)=>{
          res.json({ status: false, message: "Failed to authenticate token." });
        }
     
+})
+router.post('/generate_pin',async(req,res)=>{
+    const advance =await ePin.generatePin(req.body)
+    res.json({advance})
 })
 router.get('/test',async(req,res)=>{
     const advance =await User.test(req.body)

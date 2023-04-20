@@ -57,5 +57,5 @@ const E_pinSchema = new mongoose.Schema({
     
   
 })
-const EpinData = new mongoose.model('EpinData', E_pinSchema)
+const EpinData = new mongoose.model('Epin', E_pinSchema)
 module.exports = EpinData
