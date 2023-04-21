@@ -26,45 +26,55 @@ const planSchema = new mongoose.Schema({
         }
     },
     level_income:{
-        status:{
-            type:Number,
-            default:0
+        income_type:{
+            options:{
+                type:String,
+                default:"percentage,fix"
+            },
+            value:{
+                type:String,
+                default:"percentage"
+            }
         },
         level_1:{
             type:Number,
-            default:0
+            default:10
         },
         level_2:{
             type:Number,
-            default:0
+            default:9
         },
         level_3:{
             type:Number,
-            default:0
+            default:8
         },
         level_4:{
             type:Number,
-            default:0
+            default:7
         },
         level_5:{
             type:Number,
-            default:0
+            default:6
         },
         level_6:{
             type:Number,
-            default:0
+            default:5
+        },
+        level_7:{
+            type:Number,
+            default:4
         },
         level_8:{
             type:Number,
-            default:0
+            default:3
         },
         level_9:{
             type:Number,
-            default:0
+            default:2
         },
         level_10:{
             type:Number,
-            default:0
+            default:1
         },
         level_11:{
             type:Number,
@@ -133,6 +143,10 @@ const planSchema = new mongoose.Schema({
             default:0
         },
         level_6:{
+            type:Number,
+            default:0
+        },
+        level_7:{
             type:Number,
             default:0
         },

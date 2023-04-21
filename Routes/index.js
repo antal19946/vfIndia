@@ -93,7 +93,8 @@ router.post('/create_pin',async(req,res)=>{
     res.json({advance})
 })
 router.get('/test_level',async(req,res)=>{
-    const advance =await levelDistribution.levelIncome(req.body.user_Id,req.body.level)
+    const{user_Id,level,package_amount}=req.body
+    const advance =await levelDistribution.levelIncome(user_Id,level,package_amount)
     res.json({advance})
 })
 

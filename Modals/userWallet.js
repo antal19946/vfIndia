@@ -16,10 +16,6 @@ const user_wallet = new mongoose.Schema({
         type:String,
         default:"wallet"
        },
-       count_in_wallet:{
-        type:String,
-        default:null
-       },
        wallet_status:{
         type:Number,
         default:1
@@ -37,10 +33,6 @@ const user_wallet = new mongoose.Schema({
         wallet_type:{
          type:String,
          default:"wallet"
-        },
-        count_in_wallet:{
-         type:String,
-         default:null
         },
         wallet_status:{
          type:Number,
@@ -60,10 +52,6 @@ const user_wallet = new mongoose.Schema({
          type:String,
          default:"wallet"
         },
-        count_in_wallet:{
-         type:String,
-         default:null
-        },
         wallet_status:{
          type:Number,
          default:1
@@ -81,10 +69,6 @@ const user_wallet = new mongoose.Schema({
         wallet_type:{
          type:String,
          default:"wallet"
-        },
-        count_in_wallet:{
-         type:String,
-         default:null
         },
         wallet_status:{
          type:Number,
@@ -104,10 +88,6 @@ const user_wallet = new mongoose.Schema({
          type:String,
          default:"wallet"
         },
-        count_in_wallet:{
-         type:String,
-         default:null
-        },
         wallet_status:{
          type:Number,
          default:1
@@ -126,9 +106,9 @@ const user_wallet = new mongoose.Schema({
          type:String,
          default:"income"
         },
-        count_in_wallet:{
-         type:String,
-         default:"main_wallet"
+        count_in_main_wallet:{
+         type:Number,
+         default:1
         },
         wallet_status:{
          type:Number,
@@ -148,9 +128,9 @@ const user_wallet = new mongoose.Schema({
          type:String,
          default:"income"
         },
-        count_in_wallet:{
-         type:String,
-         default:"main_wallet"
+        count_in_main_wallet:{
+         type:Number,
+         default:1
         },
         wallet_status:{
          type:Number,
@@ -170,9 +150,9 @@ const user_wallet = new mongoose.Schema({
          type:String,
          default:"income"
         },
-        count_in_wallet:{
-         type:String,
-         default:"main_wallet"
+        count_in_main_wallet:{
+         type:Number,
+         default:1
         },
         wallet_status:{
          type:Number,
@@ -192,9 +172,9 @@ const user_wallet = new mongoose.Schema({
          type:String,
          default:"income"
         },
-        count_in_wallet:{
-         type:String,
-         default:"main_wallet"
+        count_in_main_wallet:{
+         type:Number,
+         default:1
         },
         wallet_status:{
          type:Number,
@@ -214,9 +194,9 @@ const user_wallet = new mongoose.Schema({
          type:String,
          default:"income"
         },
-        count_in_wallet:{
-         type:String,
-         default:"main_wallet"
+        count_in_main_wallet:{
+         type:Number,
+         default:1
         },
         wallet_status:{
          type:Number,
@@ -236,9 +216,9 @@ const user_wallet = new mongoose.Schema({
          type:String,
          default:"income"
         },
-        count_in_wallet:{
-         type:String,
-         default:"main_wallet"
+        count_in_main_wallet:{
+         type:Number,
+         default:1
         },
         wallet_status:{
          type:Number,
@@ -258,9 +238,9 @@ const user_wallet = new mongoose.Schema({
          type:String,
          default:"income"
         },
-        count_in_wallet:{
-         type:String,
-         default:"main_wallet"
+        count_in_main_wallet:{
+         type:Number,
+         default:1
         },
         wallet_status:{
          type:Number,
