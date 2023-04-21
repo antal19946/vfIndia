@@ -7,7 +7,9 @@ const  {User}  = require("../API/User/user");
 const { upload } = require("../controller/commans/UploadFile");
 const { Teams } = require("../API/User/getLevelTeam");
 const { verifyToken } = require("../controller/commans/Auth");
-const { ePin } = require("../API/AdminAD/generatePin");
+const { ePin } = require("../API/AdminAD/pin");
+const plan = require("../Modals/plan");
+const { levelDistribution } = require("../Controller/commans/levelDistribution");
 var router = express.Router();
 var jsonParser = bodyParser.json();
 router.use(jsonParser)
@@ -29,7 +31,14 @@ const corsOpts = {
 };
 
 router.use(cors(corsOpts));
+//////////////////////////////////////////////////////////////////////////////
 router.get('/save_advance_info',save_advance_info)
+router.get('/save_plan',async(req,res)=>{
+    const pla = new plan()
+    const plane = await pla.save()
+    res.send(plane)
+})
+/////////////////////////////////////////////////////////////////////////////////
 router.post('/register',async(req,res)=>{
     const advance =await User.register(req.body)
     res.json({advance})
@@ -79,8 +88,13 @@ router.post('/generate_pin',async(req,res)=>{
     const advance =await ePin.generatePin(req.body)
     res.json({advance})
 })
-router.get('/test',async(req,res)=>{
-    const advance =await User.test(req.body)
+router.post('/create_pin',async(req,res)=>{
+    const advance =await ePin.create_pin(req.body)
     res.json({advance})
 })
+router.get('/test_level',async(req,res)=>{
+    const advance =await levelDistribution.levelIncome(req.body.user_Id,req.body.level)
+    res.json({advance})
+})
+
 module.exports = router;

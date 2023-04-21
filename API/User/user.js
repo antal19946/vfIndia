@@ -3,15 +3,18 @@ const UserData = require("../../Modals/Users");
 const advance_info = require("../../Modals/advanceInfo");
 const validator = require("email-validator");
 const bcrypt = require("bcrypt");
+const userWallet = require("../../Modals/userWallet");
 
 class user{
   constructor() {
     this.advance = 'null';
     this.getAdvance();
+    
   }
   async getAdvance(){
     const advanceInfo = await advance_info.findOne()
     this.advance =advanceInfo
+    // console.log(this.advance);
   }
   async test(body){
     // this.advance = body
@@ -92,6 +95,7 @@ class user{
     }
   };
   async sponsor(sponsor_Id){
+    this.getAdvance();
     const {is_sponsor_active_required} = this.advance.Registration;
     const sponsor_Data = await UserData.findOne({user_Id:sponsor_Id})
     if(sponsor_Data){
@@ -139,10 +143,14 @@ class user{
           user_Id: velidUserName.userName,
           sponsor_Id,
           sponsor_Name: sponsor_Data.name,
+          joining_date:  new Date()
         });
         const result = await user.save();
+        const wallet = new userWallet({
+          user_Id:result.user_Id
+        })
+        const savewallet = await wallet.save()
         const accessToken = await generateToken(result.user_Id);
-
         return {status:Error.status,message:Error.message,accessToken,result}
   }else{
     return Error

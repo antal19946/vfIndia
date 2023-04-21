@@ -48,7 +48,6 @@ const E_pinSchema = new mongoose.Schema({
     },
     created_on:{
         type: String,
-        default:new Date()
     },
     updated_on:{
         type: String,
