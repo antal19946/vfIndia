@@ -143,7 +143,7 @@ const advanceInfoSchema = new mongoose.Schema({
         topup_type:{
             title:{
                 type:String,
-                default:"topup type"
+                default:"Topup"
             },
             options:{
                 type:String,

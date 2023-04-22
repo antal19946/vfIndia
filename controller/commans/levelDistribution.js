@@ -9,7 +9,7 @@ class Distribution {
     const user = await User.getProfile(user_Id);
     var sponsor = user.sponsor_Id;
     const Plans = await plan.findOne();
-    for (let index = 1; index <= 100; index++) {
+    for (let index = 1; index <= level; index++) {
       const spo = await UserData.findOne({ user_Id: sponsor });
       const level = `level_${index}`;
       if (spo.length < 1 || Plans.level_income[level]<=0 || !Plans.level_income[level]) {
