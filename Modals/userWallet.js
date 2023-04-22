@@ -251,6 +251,24 @@ const user_wallet = new mongoose.Schema({
          default:0
         }
      },
+     active_direct:{
+      name:{
+         type:String,
+         default:"Active direct"
+        },
+        wallet_type:{
+         type:String,
+         default:"Team"
+        },
+        wallet_status:{
+         type:Number,
+         default:1
+        },
+        value:{
+         type:Number,
+         default:0
+        }
+     }
 })
 const userWallet = new mongoose.model('user_wallet', user_wallet)
 module.exports = userWallet;

@@ -2,14 +2,14 @@ const express = require("express");
 var bodyParser = require('body-parser');
 const cors = require('cors')
 const path = require('path');
-const { save_advance_info } = require("../API/AdminAD/advance");
 const  {User}  = require("../API/User/user");
 const { upload } = require("../controller/commans/UploadFile");
 const { Teams } = require("../API/User/getLevelTeam");
 const { verifyToken } = require("../controller/commans/Auth");
 const { ePin } = require("../API/AdminAD/pin");
-const plan = require("../Modals/plan");
 const { levelDistribution } = require("../Controller/commans/levelDistribution");
+const { Buy } = require("../API/User/buyPackage");
+const projectSetup = require("../Controller/projectSetup");
 var router = express.Router();
 var jsonParser = bodyParser.json();
 router.use(jsonParser)
@@ -32,12 +32,14 @@ const corsOpts = {
 
 router.use(cors(corsOpts));
 //////////////////////////////////////////////////////////////////////////////
-router.get('/save_advance_info',save_advance_info)
-router.get('/save_plan',async(req,res)=>{
-    const pla = new plan()
-    const plane = await pla.save()
-    res.send(plane)
-})
+ router.get('/project_setup',async(req,res)=>{
+        const advance = await projectSetup.save_advance_info();
+        const firstUser = await projectSetup.addFirstUser();
+        const defaultPin = await projectSetup.addDefaultPackage();
+        const plan = await projectSetup.savePlan();
+        res.json({advance,firstUser,defaultPin,plan})
+ })
+
 /////////////////////////////////////////////////////////////////////////////////
 router.post('/register',async(req,res)=>{
     const advance =await User.register(req.body)
@@ -96,6 +98,22 @@ router.get('/test_level',async(req,res)=>{
     const{user_Id,level,package_amount}=req.body
     const advance =await levelDistribution.levelIncome(user_Id,level,package_amount)
     res.json({advance})
+})
+router.post('/buy_package',async(req,res)=>{
+
+    const Authorization_Token = await req.header("Authorization");
+    if (Authorization_Token) {
+        const verification= await verifyToken(Authorization_Token);
+        if(verification.status){
+         const activateUser = await Buy.buyPackage(verification.resp.user_Id,req.body)
+          res.json({activateUser}); 
+        }else{
+         res.json({verification});
+        }
+       } else {
+         res.json({ status: false, message: "Failed to authenticate token." });
+       }
+    
 })
 
 module.exports = router;
