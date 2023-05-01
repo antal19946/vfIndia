@@ -3,26 +3,30 @@ const mongoose = require('mongoose')
 
 
 const planSchema = new mongoose.Schema({
-    package: {
-        package_1: {
-            package_name: {
-                type: String,
-                default: null
-            },
-            value: {
-                type: Number,
-                default: 0
-            }
+    package_type: {
+        package_name: {
+            type: String,
+            default: "Starter"
         },
-        package_2: {
-            package_name: {
-                type: String,
-                default: null
-            },
-            value: {
-                type: Number,
-                default: 0
-            }
+        min_amount: {
+            type: Number,
+            default: 0
+        },
+        mex_amount: {
+            type: Number,
+            default: 1e18
+        },
+        status: {
+            type: Number,
+            default: 1
+        },
+        added_on: {
+            type: String,
+            default: new Date()
+        },
+        updated_on: {
+            type: String,
+            default: null
         }
     },
     level_income: {
@@ -47,7 +51,7 @@ const planSchema = new mongoose.Schema({
             }
         },
         level_2: {
-           direct_required: {
+            direct_required: {
                 type: Number,
                 default: 0
             },
@@ -57,7 +61,7 @@ const planSchema = new mongoose.Schema({
             }
         },
         level_3: {
-           direct_required: {
+            direct_required: {
                 type: Number,
                 default: 0
             },
@@ -67,7 +71,7 @@ const planSchema = new mongoose.Schema({
             }
         },
         level_4: {
-           direct_required: {
+            direct_required: {
                 type: Number,
                 default: 0
             },
@@ -77,7 +81,7 @@ const planSchema = new mongoose.Schema({
             }
         },
         level_5: {
-           direct_required: {
+            direct_required: {
                 type: Number,
                 default: 0
             },
@@ -87,7 +91,7 @@ const planSchema = new mongoose.Schema({
             }
         },
         level_6: {
-           direct_required: {
+            direct_required: {
                 type: Number,
                 default: 0
             },
@@ -97,7 +101,7 @@ const planSchema = new mongoose.Schema({
             }
         },
         level_7: {
-           direct_required: {
+            direct_required: {
                 type: Number,
                 default: 0
             },
@@ -107,7 +111,7 @@ const planSchema = new mongoose.Schema({
             }
         },
         level_8: {
-           direct_required: {
+            direct_required: {
                 type: Number,
                 default: 0
             },
@@ -117,7 +121,7 @@ const planSchema = new mongoose.Schema({
             }
         },
         level_9: {
-           direct_required: {
+            direct_required: {
                 type: Number,
                 default: 0
             },
@@ -127,7 +131,7 @@ const planSchema = new mongoose.Schema({
             }
         },
         level_10: {
-           direct_required: {
+            direct_required: {
                 type: Number,
                 default: 0
             },
@@ -137,7 +141,7 @@ const planSchema = new mongoose.Schema({
             }
         },
         level_11: {
-           direct_required: {
+            direct_required: {
                 type: Number,
                 default: 0
             },
@@ -147,7 +151,7 @@ const planSchema = new mongoose.Schema({
             }
         },
         level_12: {
-           direct_required: {
+            direct_required: {
                 type: Number,
                 default: 0
             },
@@ -157,7 +161,7 @@ const planSchema = new mongoose.Schema({
             }
         },
         level_13: {
-           direct_required: {
+            direct_required: {
                 type: Number,
                 default: 0
             },
@@ -167,7 +171,7 @@ const planSchema = new mongoose.Schema({
             }
         },
         level_14: {
-           direct_required: {
+            direct_required: {
                 type: Number,
                 default: 0
             },
@@ -177,7 +181,7 @@ const planSchema = new mongoose.Schema({
             }
         },
         level_15: {
-           direct_required: {
+            direct_required: {
                 type: Number,
                 default: 0
             },
@@ -187,7 +191,7 @@ const planSchema = new mongoose.Schema({
             }
         },
         level_16: {
-           direct_required: {
+            direct_required: {
                 type: Number,
                 default: 0
             },
@@ -197,7 +201,7 @@ const planSchema = new mongoose.Schema({
             }
         },
         level_17: {
-           direct_required: {
+            direct_required: {
                 type: Number,
                 default: 0
             },
@@ -207,7 +211,7 @@ const planSchema = new mongoose.Schema({
             }
         },
         level_18: {
-           direct_required: {
+            direct_required: {
                 type: Number,
                 default: 0
             },
@@ -217,7 +221,7 @@ const planSchema = new mongoose.Schema({
             }
         },
         level_10: {
-           direct_required: {
+            direct_required: {
                 type: Number,
                 default: 0
             },
@@ -227,7 +231,7 @@ const planSchema = new mongoose.Schema({
             }
         },
         level_20: {
-           direct_required: {
+            direct_required: {
                 type: Number,
                 default: 0
             },
@@ -324,25 +328,13 @@ const planSchema = new mongoose.Schema({
         },
     },
     roi_income: {
-        package_1: {
-            percentage: {
-                type: Number,
-                default: 0
-            },
-            status: {
-                type: Number,
-                default: 0
-            }
+        value: {
+            type: Number,
+            default: 0
         },
-        package_2: {
-            percentage: {
-                type: Number,
-                default: 0
-            },
-            status: {
-                type: Number,
-                default: 0
-            }
+        status: {
+            type: Number,
+            default: 0
         }
     }
 })

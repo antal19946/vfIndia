@@ -23,6 +23,10 @@ const user_wallet = new mongoose.Schema({
        value:{
         type:Number,
         default:0
+       },
+       updated_on:{
+         type:String,
+         default:null
        }
     },
     withdrawable:{
@@ -41,7 +45,11 @@ const user_wallet = new mongoose.Schema({
         value:{
          type:Number,
          default:0
-        }
+        },
+        updated_on:{
+         type:String,
+         default:null
+       }
      },
      total_withdrawal:{
         name:{
@@ -59,7 +67,11 @@ const user_wallet = new mongoose.Schema({
         value:{
          type:Number,
          default:0
-        }
+        },
+        updated_on:{
+         type:String,
+         default:null
+       }
      },
      total_payout:{
         name:{
@@ -77,7 +89,11 @@ const user_wallet = new mongoose.Schema({
         value:{
          type:Number,
          default:0
-        }
+        },
+        updated_on:{
+         type:String,
+         default:null
+       }
      },
     fund_wallet:{
         name:{
@@ -95,7 +111,11 @@ const user_wallet = new mongoose.Schema({
         value:{
          type:Number,
          default:0
-        }
+        },
+        updated_on:{
+         type:String,
+         default:null
+       }
      },
      level_income:{
         name:{
@@ -117,7 +137,11 @@ const user_wallet = new mongoose.Schema({
         value:{
          type:Number,
          default:0
-        }
+        },
+        updated_on:{
+         type:String,
+         default:null
+       }
      },
      direct_income:{
         name:{
@@ -139,7 +163,11 @@ const user_wallet = new mongoose.Schema({
         value:{
          type:Number,
          default:0
-        }
+        },
+        updated_on:{
+         type:String,
+         default:null
+       }
      },
      binary_income:{
         name:{
@@ -161,7 +189,11 @@ const user_wallet = new mongoose.Schema({
         value:{
          type:Number,
          default:0
-        }
+        },
+        updated_on:{
+         type:String,
+         default:null
+       }
      },
      single_leg_income:{
         name:{
@@ -183,7 +215,11 @@ const user_wallet = new mongoose.Schema({
         value:{
          type:Number,
          default:0
-        }
+        },
+        updated_on:{
+         type:String,
+         default:null
+       }
      },
      matrix_income:{
         name:{
@@ -205,7 +241,11 @@ const user_wallet = new mongoose.Schema({
         value:{
          type:Number,
          default:0
-        }
+        },
+        updated_on:{
+         type:String,
+         default:null
+       }
      },
      roi_income:{
         name:{
@@ -227,7 +267,11 @@ const user_wallet = new mongoose.Schema({
         value:{
          type:Number,
          default:0
-        }
+        },
+        updated_on:{
+         type:String,
+         default:null
+       }
      },
      roi_level_income:{
         name:{
@@ -249,7 +293,11 @@ const user_wallet = new mongoose.Schema({
         value:{
          type:Number,
          default:0
-        }
+        },
+        updated_on:{
+         type:String,
+         default:null
+       }
      },
      active_direct:{
       name:{
@@ -267,7 +315,11 @@ const user_wallet = new mongoose.Schema({
         value:{
          type:Number,
          default:0
-        }
+        },
+        updated_on:{
+         type:String,
+         default:null
+       }
      }
 })
 const userWallet = new mongoose.model('user_wallet', user_wallet)

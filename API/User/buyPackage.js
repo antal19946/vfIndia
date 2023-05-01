@@ -10,7 +10,7 @@ class buy{
     async activeDirect(sponsor_Id){
         const active_direct = await UserData.find({sponsor_Id,status:1}).count();
         const update_active_direct =await userWallet.findOneAndUpdate({user_Id:sponsor_Id},{'active_direct.value':active_direct})
-        console.log(update_active_direct)
+        // console.log(update_active_direct)
     }
     async buyPackage(userSession,body){
         const {pin_type,user_Id} = body;
