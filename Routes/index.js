@@ -10,7 +10,7 @@ const { ePin } = require("../API/AdminAD/pin");
 const { levelDistribution } = require("../Controller/commans/levelDistribution");
 const { Buy } = require("../API/User/buyPackage");
 const projectSetup = require("../Controller/projectSetup");
-const { package } = require("../API/AdminAD/package");
+const { Fund } = require("../API/AdminAD/addFund");
 var router = express.Router();
 var jsonParser = bodyParser.json();
 router.use(jsonParser)
@@ -91,19 +91,20 @@ router.post('/generate_pin',async(req,res)=>{
     const advance =await ePin.generatePin(req.body)
     res.json({advance})
 })
+router.post('/add_fund',async(req,res)=>{
+    const advance =await Fund.addFund(req.body)
+    res.json({advance})
+})
 router.post('/create_pin',async(req,res)=>{
     const advance =await ePin.create_pin(req.body)
     res.json({advance})
 })
-router.post('/create_package',async(req,res)=>{
-    const advance =await package.addPackage(req.body)
-    res.json({advance})
-})
-router.get('/test_level',async(req,res)=>{
-    const{user_Id,level,package_amount}=req.body
-    const advance =await levelDistribution.levelIncome(user_Id,level,package_amount)
-    res.json({advance})
-})
+
+// router.get('/test_level',async(req,res)=>{
+//     const{user_Id,level,package_amount}=req.body
+//     const advance =await levelDistribution.levelIncome(user_Id,level,package_amount)
+//     res.json({advance})
+// })
 router.post('/buy_package',async(req,res)=>{
 
     const Authorization_Token = await req.header("Authorization");

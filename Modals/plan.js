@@ -10,7 +10,7 @@ const planSchema = new mongoose.Schema({
         },
         min_amount: {
             type: Number,
-            default: 0
+            default: 1
         },
         mex_amount: {
             type: Number,

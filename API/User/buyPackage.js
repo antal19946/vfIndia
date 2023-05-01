@@ -3,6 +3,7 @@ const EpinData = require("../../Modals/Pin");
 const UserData = require("../../Modals/Users");
 const advance_info = require("../../Modals/advanceInfo");
 const pin_details = require("../../Modals/pinDetails");
+const plan = require("../../Modals/plan");
 const userWallet = require("../../Modals/userWallet");
 
 class buy{
@@ -13,12 +14,12 @@ class buy{
         // console.log(update_active_direct)
     }
     async buyPackage(userSession,body){
-        const {pin_type,user_Id} = body;
+        const {package_name,user_Id} = body;
         const advance = await advance_info.findOne()
         if (advance.Investment.topup_type.value==="pin") {
-            const pinDetails = await pin_details.findOne({'pin_type.package_name':pin_type,'pin_type.status':1})
+            const pinDetails = await pin_details.findOne({'pin_type.package_name':package_name,'pin_type.status':1})
             if (pinDetails) {
-                const num_of_available_pin = await EpinData.findOne({user_Id:userSession,pin_type,is_used:0,status:1});
+                const num_of_available_pin = await EpinData.findOne({user_Id:userSession,pin_type:package_name,is_used:0,status:1});
                 if (num_of_available_pin) {
                     const user = await UserData.findOne({user_Id});
                     if (user) {
@@ -42,7 +43,13 @@ class buy{
                 return {status:false,message:"can't find this type of pin"}
             }
         } else {
-            
+            const packageDetails = await plan.findOne({'package_type.package_name':package_name});
+            if (packageDetails) {
+                const fundWallet = await userWallet.findOne({user_Id:userSession,'fund_wallet.wallet_status':1});
+
+            } else {
+                return {status:false,message:"can't find this type of package"}
+            }
         }
     }
 }
