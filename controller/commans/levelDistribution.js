@@ -6,10 +6,10 @@ const { Transection } = require("./transection");
 
 class Distribution {
   constructor() { }
-  async levelIncome(user_Id, level, packageAmount) {
+  async levelIncome(user_Id, level, packageAmount,packageDetails) {
     const user = await User.getProfile(user_Id);
     var sponsor = user.sponsor_Id;
-    const Plans = await plan.findOne();
+    const Plans = await packageDetails;
     for (let index = 1; index <= level; index++) {
       const spo = await UserData.findOne({ user_Id: sponsor });
       const level = `level_${index}`;

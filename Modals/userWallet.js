@@ -117,6 +117,28 @@ const user_wallet = new mongoose.Schema({
          default:null
        }
      },
+     self_investment:{
+      name:{
+       type:String,
+       default:" My Investment"
+      },
+      wallet_type:{
+       type:String,
+       default:"Investment"
+      },
+      wallet_status:{
+       type:Number,
+       default:1
+      },
+      value:{
+       type:Number,
+       default:0
+      },
+      updated_on:{
+       type:String,
+       default:null
+     }
+   },
      level_income:{
         name:{
          type:String,

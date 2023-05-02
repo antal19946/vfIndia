@@ -11,6 +11,7 @@ const { levelDistribution } = require("../Controller/commans/levelDistribution")
 const { Buy } = require("../API/User/buyPackage");
 const projectSetup = require("../Controller/projectSetup");
 const { Fund } = require("../API/AdminAD/addFund");
+const advance_info = require("../Modals/advanceInfo");
 var router = express.Router();
 var jsonParser = bodyParser.json();
 router.use(jsonParser)
@@ -111,8 +112,15 @@ router.post('/buy_package',async(req,res)=>{
     if (Authorization_Token) {
         const verification= await verifyToken(Authorization_Token);
         if(verification.status){
-         const activateUser = await Buy.buyPackage(verification.resp.user_Id,req.body)
-          res.json({activateUser}); 
+            const advance = await advance_info.findOne()
+            // res.json({advance})
+            if (advance.Investment.topup_type.value == "pin") {
+                const activateUser = await Buy.topupWithPin(verification.resp.user_Id,req.body)
+                 res.json({activateUser}); 
+                } else {
+                const activateUser = await Buy.topupWithFund(verification.resp.user_Id,req.body)
+                 res.json({activateUser}); 
+            }
         }else{
          res.json({verification});
         }
