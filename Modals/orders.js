@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 // const validator = require('validator')
 
 
-const transectionSchema = new mongoose.Schema({
+const orderSchema = new mongoose.Schema({
     user_Id:{
         type:String
     },
@@ -13,7 +13,7 @@ const transectionSchema = new mongoose.Schema({
         type:String
     },
     package_name:{
-        type:Number
+        type:String
     },
     order_amount:{
         type:Number
@@ -24,10 +24,13 @@ const transectionSchema = new mongoose.Schema({
     status:{
         type:String
     },
+    source:{
+        type:String
+    },
     remark:{
         type:String
     },
     
 })
-const transection = new mongoose.model('transection', transectionSchema)
-module.exports = transection;
+const order = new mongoose.model('order', orderSchema)
+module.exports = order;

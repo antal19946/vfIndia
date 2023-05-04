@@ -1,8 +1,7 @@
 const UserData = require("../Modals/Users");
 const advance_info = require("../Modals/advanceInfo");
 const userWallet = require("../Modals/userWallet");
-const { ePin } = require("../API/AdminAD/pin");
-const plan = require("../Modals/plan");
+const { Package } = require("../API/AdminAD/package");
 const bcrypt = require("bcrypt");
 
 class setup {
@@ -39,17 +38,14 @@ class setup {
     }
     async addDefaultPackage(){
         const body = {
-            package_name:"welcome package",
-            pin_rate:100                
+            package_name:'starter',
+            min_amount:10,
+            mex_amount:1000               
            }
-           const defaultPackage = await ePin.create_pin(body);
+           const defaultPackage = await Package.createPackage(body);
            return defaultPackage;
     }
-    async savePlan(){
-        const pla = new plan()
-    const Plan = await pla.save()
-    return Plan;
-    }
+    
 }
 
 const hashPassword = async (plaintextPassword) => {

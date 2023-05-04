@@ -1,9 +1,9 @@
 const { levelDistribution } = require("../../Controller/commans/levelDistribution");
+const { saveOrder } = require("../../Controller/commans/order");
 const { Transection } = require("../../Controller/commans/transection");
 const EpinData = require("../../Modals/Pin");
 const UserData = require("../../Modals/Users");
 const advance_info = require("../../Modals/advanceInfo");
-const pin_details = require("../../Modals/pinDetails");
 const plan = require("../../Modals/plan");
 const userWallet = require("../../Modals/userWallet");
 
@@ -17,17 +17,36 @@ class buy {
     async topupWithPin(userSession, body) {
         const { package_name, user_Id } = body;
 
-        const pinDetails = await pin_details.findOne({ 'pin_type.package_name': package_name, 'pin_type.status': 1 })
+        const pinDetails = await plan.findOne({ 'package_type.package_name': package_name, 'package_type.status': 1,'package_type.package_type':'pin' })
         if (pinDetails) {
             const num_of_available_pin = await EpinData.findOne({ user_Id: userSession, pin_type: package_name, is_used: 0, status: 1 });
             if (num_of_available_pin) {
                 const user = await UserData.findOne({ user_Id });
                 if (user) {
                     if (user.status == 0) {
-                        const activateUser = await UserData.findOneAndUpdate({ user_Id, status: 0 }, { status: 1 ,Activation_date:new Date()});
+                        const activateUser = await UserData.findOneAndUpdate({ user_Id, status: 0 }, { status: 1, Activation_date: new Date() });
                         this.activeDirect(activateUser.sponsor_Id)
-                        const use_pin = await EpinData.findOneAndUpdate({ user_Id: num_of_available_pin.user_Id, pin: num_of_available_pin.pin }, { use_for_user_Id: activateUser.user_Id, is_used: 1 });
-                        await levelDistribution.levelIncome(activateUser.user_Id, 100, pinDetails.pin_type.pin_rate,pinDetails)
+                        const use_pin = await EpinData.findOneAndUpdate({
+                            user_Id: num_of_available_pin.user_Id,
+                            pin: num_of_available_pin.pin
+                        },
+                            {
+                                use_for_user_Id: activateUser.user_Id,
+                                is_used: 1
+                            });
+                        await saveOrder({
+                            user_Id: activateUser.user_Id,
+                            source:'pin',
+                            tx_type: 'purchase',
+                            package_name: pinDetails.package_type.package_name,
+                            order_amount: pinDetails.package_type.mex_amount,
+                            status: 1,
+                            remark: null
+                        })
+                        await levelDistribution.levelIncome(activateUser.user_Id,
+                            100,
+                            pinDetails.package_type.mex_amount,
+                            pinDetails)
                         return { status: true, activateUser };
                     } else {
                         return { status: false, message: "User already active" };
@@ -46,7 +65,7 @@ class buy {
     }
     async topupWithFund(userSession, body) {
         const { package_name, user_Id, amount } = body;
-        const packageDetails = await plan.findOne({ 'package_type.package_name': package_name });
+        const packageDetails = await plan.findOne({ 'package_type.package_name': package_name,'package_type.status': 1, });
         if (packageDetails) {
             const Wallet = await userWallet.findOne({ user_Id: userSession, 'fund_wallet.wallet_status': 1 });
             if (amount >= packageDetails.package_type.min_amount && amount <= packageDetails.package_type.mex_amount) {
@@ -54,7 +73,7 @@ class buy {
                     const user = await UserData.findOne({ user_Id });
                     if (user) {
                         if (user.status == 0) {
-                            const activateUser = await UserData.findOneAndUpdate({ user_Id, status: 0 }, { status: 1,Activation_date:new Date() });
+                            const activateUser = await UserData.findOneAndUpdate({ user_Id, status: 0 }, { status: 1, Activation_date: new Date() });
                             this.activeDirect(activateUser.sponsor_Id)
                             const use_fund = await userWallet.findOneAndUpdate({ user_Id: userSession }, { 'fund_wallet.value': Wallet.fund_wallet.value - amount });
                             Transection({
@@ -68,6 +87,15 @@ class buy {
                                 status: 1,
                                 remark: `Debited ${amount} for topup ${user_Id}`
                             });
+                            await saveOrder({
+                                user_Id: activateUser.user_Id,
+                                source:'fund',
+                                tx_type: 'purchase',
+                                package_name: packageDetails.package_type.package_name,
+                                order_amount: amount,
+                                status: 1,
+                                remark: null
+                            })
 
                             await levelDistribution.levelIncome(activateUser.user_Id, 100, amount, packageDetails)
                             return { status: true, activateUser };

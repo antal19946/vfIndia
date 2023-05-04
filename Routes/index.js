@@ -6,12 +6,13 @@ const  {User}  = require("../API/User/user");
 const { upload } = require("../controller/commans/UploadFile");
 const { Teams } = require("../API/User/getLevelTeam");
 const { verifyToken } = require("../controller/commans/Auth");
-const { ePin } = require("../API/AdminAD/pin");
 const { levelDistribution } = require("../Controller/commans/levelDistribution");
 const { Buy } = require("../API/User/buyPackage");
 const projectSetup = require("../Controller/projectSetup");
 const { Fund } = require("../API/AdminAD/addFund");
 const advance_info = require("../Modals/advanceInfo");
+const { Crons } = require("../Controller/crons");
+const { Package } = require("../API/AdminAD/package");
 var router = express.Router();
 var jsonParser = bodyParser.json();
 router.use(jsonParser)
@@ -37,9 +38,8 @@ router.use(cors(corsOpts));
  router.get('/project_setup',async(req,res)=>{
         const advance = await projectSetup.save_advance_info();
         const firstUser = await projectSetup.addFirstUser();
-        const defaultPin = await projectSetup.addDefaultPackage();
-        const plan = await projectSetup.savePlan();
-        res.json({advance,firstUser,defaultPin,plan})
+        const defaultPackage = await projectSetup.addDefaultPackage();
+        res.json({advance,firstUser,defaultPackage,plan})
  })
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -89,7 +89,7 @@ router.get('/get_level_team',async(req,res)=>{
     
 })
 router.post('/generate_pin',async(req,res)=>{
-    const advance =await ePin.generatePin(req.body)
+    const advance =await Package.generatePin(req.body)
     res.json({advance})
 })
 router.post('/add_fund',async(req,res)=>{
@@ -97,7 +97,11 @@ router.post('/add_fund',async(req,res)=>{
     res.json({advance})
 })
 router.post('/create_pin',async(req,res)=>{
-    const advance =await ePin.create_pin(req.body)
+    const advance =await package.createPackage(req.body)
+    res.json({advance})
+})
+router.post('/roi_closing',async(req,res)=>{
+    const advance =await Crons.roi_closing()
     res.json({advance})
 })
 

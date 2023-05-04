@@ -8,6 +8,10 @@ const planSchema = new mongoose.Schema({
             type: String,
             default: "Starter"
         },
+        package_type: {
+            type: String,
+            default: null
+        },
         min_amount: {
             type: Number,
             default: 1
@@ -328,6 +332,16 @@ const planSchema = new mongoose.Schema({
         },
     },
     roi_income: {
+        income_type: {
+            options: {
+                type: String,
+                default: "percentage,fix"
+            },
+            value: {
+                type: String,
+                default: "percentage"
+            }
+        },
         value: {
             type: Number,
             default: 0
