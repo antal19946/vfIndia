@@ -6,6 +6,7 @@ const planSchema = new mongoose.Schema({
     package_type: {
         package_name: {
             type: String,
+            unique:true,
             default: "Starter"
         },
         package_type: {

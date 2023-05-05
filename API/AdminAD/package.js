@@ -17,18 +17,19 @@ class Pack{
     return result;
 }
     async generatePin(body){
-        const pin_type = await plan.findOne({'package_type.package_name':body.package_name})
-        const isUser = await UserData.findOne({user_Id:body.user_Id})
+        const {package_name,user_Id,number_of_pin}=body;
+        const pin_type = await plan.findOne({'package_type.package_name':package_name})
+        const isUser = await UserData.findOne({user_Id:user_Id})
         if (pin_type) {
             if (isUser) {
-                for(let i =0;i<body.num;i++){
+                for(let i =0;i<number_of_pin;i++){
                     try{
         
                         const ePin = new EpinData({
                             pin:this.generateString(10),
-                            user_Id:body.user_Id,
+                            user_Id:user_Id,
                             created_by:'admin',
-                            pin_type:body.package_name,
+                            pin_type:package_name,
                             created_on:new Date()
                         })
                         console.log(ePin)
@@ -57,7 +58,7 @@ class Pack{
                     package_type:{
                         package_name,
                         package_type:'pin',
-                        min_amount,
+                        min_amount:mex_amount,
                         mex_amount,
                         added_on:new Date()              
                        }

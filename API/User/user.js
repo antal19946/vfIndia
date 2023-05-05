@@ -158,7 +158,7 @@ class user {
   }
 
   async UpdateProfile(Authorization_Token, body, fileName, hostName) {
-    const { name, email, phone } = body;
+    const { name, email, mobile } = body;
 
     const profile_pic = "http://" + hostName + "/" + fileName;
     if (Authorization_Token) {
@@ -166,7 +166,7 @@ class user {
       if (verification.status) {
         const update = await UserData.findOneAndUpdate(
           { user_Id: verification.resp.user_Id },
-          { name, email, phone, profile_pic })
+          { name, email, mobile, profile_pic })
         return { status: true, update };
       } else {
         return verification;
