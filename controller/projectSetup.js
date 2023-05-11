@@ -3,10 +3,23 @@ const advance_info = require("../Modals/advanceInfo");
 const userWallet = require("../Modals/userWallet");
 const { Package } = require("../API/AdminAD/package");
 const bcrypt = require("bcrypt");
+const adminData = require("../Modals/admin");
 
 class setup {
     constructor() {
 
+    }
+    async addDefaultAdmin() {
+        const admin = new adminData({
+            user: 'admin',
+            type: 'admin',
+            password: await hashPassword("test"),
+            email: 'admin@gmail.com',
+            mobile: null,
+            created_on: new Date()
+        });
+        const result = await admin.save();
+        return result;
     }
     async addFirstUser() {
         const user = new UserData({
@@ -15,7 +28,7 @@ class setup {
             mobile: '1111111111',
             password: await hashPassword("test"),
             user_Id: "demo",
-            status:1,
+            status: 1,
             sponsor_Id: "",
             joining_date: new Date()
         });
@@ -36,16 +49,16 @@ class setup {
             return ({ isAdvanse, message: "advance info already saved" })
         }
     }
-    async addDefaultPackage(){
+    async addDefaultPackage() {
         const body = {
-            package_name:'starter',
-            min_amount:10,
-            mex_amount:1000               
-           }
-           const defaultPackage = await Package.createPackage(body);
-           return defaultPackage;
+            package_name: 'starter',
+            min_amount: 10,
+            mex_amount: 1000
+        }
+        const defaultPackage = await Package.createPackage(body);
+        return defaultPackage;
     }
-    
+
 }
 
 const hashPassword = async (plaintextPassword) => {
@@ -55,4 +68,4 @@ const hashPassword = async (plaintextPassword) => {
 };
 
 const projectSetup = new setup();
-module.exports=projectSetup;
+module.exports = projectSetup;

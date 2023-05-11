@@ -13,6 +13,7 @@ const { Fund } = require("../API/AdminAD/addFund");
 const advance_info = require("../Modals/advanceInfo");
 const { Crons } = require("../Controller/crons");
 const { Package } = require("../API/AdminAD/package");
+const { Admin } = require("../API/AdminAD/admin");
 var router = express.Router();
 var jsonParser = bodyParser.json();
 router.use(jsonParser)
@@ -39,10 +40,16 @@ router.get('/project_setup', async (req, res) => {
     const advance = await projectSetup.save_advance_info();
     const firstUser = await projectSetup.addFirstUser();
     const defaultPackage = await projectSetup.addDefaultPackage();
-    res.json({ advance, firstUser, defaultPackage })
+    const DefaultAdmin = await projectSetup.addDefaultAdmin();
+    res.json({ advance, firstUser, defaultPackage, DefaultAdmin})
 })
 
-/////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////// Add Admin  /////////////////////////////////////////////
+router.post('/create_admin', async (req, res) => {
+    const advance = await Admin.addAdmin(req.body)
+    res.json({ advance })
+})
+////////////////////////////////////////////////////////////////////////////////////
 router.post('/register', async (req, res) => {
     const advance = await User.register(req.body)
     res.json({ advance })
